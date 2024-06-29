@@ -9,141 +9,138 @@
 #include <thread>
 /**
  * @class CHidBase
- * @brief HIDÉè±¸»ù´¡Àà£¬ÊµÏÖICommunicateDevice½Ó¿Ú£¬Ö»Ìá¹©×î»ù±¾µÄHIDÉè±¸²Ù×÷£¬ÆäÓàËùÓĞ¹ØÓÚÉè±¸µÄ¹ÜÀí¶¼ĞèÒªÔÚÉÏ²ãµ÷ÓÃÖĞÌá¹©
- * ×¢£ºÄ¿Ç°ÊÇÏß³Ì°²È«µÄ
+ * @brief HIDè®¾å¤‡åŸºç¡€ç±»ï¼Œå®ç°ICommunicateDeviceæ¥å£ï¼Œåªæä¾›æœ€åŸºæœ¬çš„HIDè®¾å¤‡æ“ä½œï¼Œå…¶ä½™æ‰€æœ‰å…³äºè®¾å¤‡çš„ç®¡ç†éƒ½éœ€è¦åœ¨ä¸Šå±‚è°ƒç”¨ä¸­æä¾›
+ * æ³¨ï¼šç›®å‰æ˜¯çº¿ç¨‹å®‰å…¨çš„
  *
- * ¸ÃÀàÓÃÓÚÊµÏÖHIDÉè±¸µÄ³õÊ¼»¯¡¢Ã¶¾Ù¡¢´ò¿ª¡¢¹Ø±Õ¡¢¶ÁĞ´²Ù×÷ÒÔ¼°Éè±¸±ä»¯µÄÍ¨Öª»Øµ÷¡£
- * Ã¶¾ÙÉè±¸Ó¦¸ÃÔÚÉÏ²ãÖ´ĞĞ£¬±¾²ãÖ»ÊµÀı»¯ÌØ¶¨¶ÔÏó
+ * è¯¥ç±»ç”¨äºå®ç°HIDè®¾å¤‡çš„åˆå§‹åŒ–ã€æšä¸¾ã€æ‰“å¼€ã€å…³é—­ã€è¯»å†™æ“ä½œä»¥åŠè®¾å¤‡å˜åŒ–çš„é€šçŸ¥å›è°ƒã€‚
+ * æšä¸¾è®¾å¤‡åº”è¯¥åœ¨ä¸Šå±‚æ‰§è¡Œï¼Œæœ¬å±‚åªå®ä¾‹åŒ–ç‰¹å®šå¯¹è±¡
  */
 class CHID_Device : public ICommunicateDevice
 {
 public:
 	/**
-	 * @brief ¹¹Ôìº¯Êı
+	 * @brief æ„é€ å‡½æ•°
 	 */
 	CHID_Device();
 	/**
-   * @brief Îö¹¹º¯Êı
+   * @brief ææ„å‡½æ•°
    */
 	~CHID_Device();
 	/**
-  * @brief ³õÊ¼»¯HIDÉè±¸
-  * @return ³É¹¦·µ»Øtrue£¬·ñÔò·µ»Øfalse
+  * @brief åˆå§‹åŒ–HIDè®¾å¤‡
+  * @return æˆåŠŸè¿”å›trueï¼Œå¦åˆ™è¿”å›false
   */
 	bool Init();
 	/**
-	* @brief ´ò¿ªÉè±¸
-	* @param dev_path Éè±¸Â·¾¶
+	* @brief æ‰“å¼€è®¾å¤‡
+	* @param dev_path è®¾å¤‡è·¯å¾„
 	* @param vid vID
 	* @param pid pID
-	* @param param3 ²ÎÊı3
-	* @return ³É¹¦·µ»Øtrue£¬·ñÔò·µ»Øfalse
+	* @param param3 å‚æ•°3
+	* @return æˆåŠŸè¿”å›trueï¼Œå¦åˆ™è¿”å›false
 	*/
 	bool OpenDevice(const char* dev_path, uint32_t vid, uint32_t pid, void* param3);
 	/**
-	* @brief »ñÈ¡Éè±¸vid
-	* @return ·µ»ØÉè±¸vid
+	* @brief è·å–è®¾å¤‡vid
+	* @return è¿”å›è®¾å¤‡vid
 	*/
 	uint32_t GetDeviceParam1() const;
 	/**
-	* @brief »ñÈ¡Éè±¸pid
-	* @return ·µ»ØÉè±¸pid
+	* @brief è·å–è®¾å¤‡pid
+	* @return è¿”å›è®¾å¤‡pid
 	*/
 	uint32_t GetDeviceParam2() const;
 	/**
-	* @brief ÅĞ¶ÏÉè±¸ÊÇ·ñ´ò¿ª
-	* @return Éè±¸´ò¿ª·µ»Øtrue£¬·ñÔò·µ»Øfalse
+	* @brief åˆ¤æ–­è®¾å¤‡æ˜¯å¦æ‰“å¼€
+	* @return è®¾å¤‡æ‰“å¼€è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 	*/
 	bool IsDeviceOpen();
 	/**
-	* @brief »ñÈ¡Éè±¸Ãû³Æ
-	* @return ·µ»ØÉè±¸Ãû³Æ
+	* @brief è·å–è®¾å¤‡åç§°
+	* @return è¿”å›è®¾å¤‡åç§°
 	*/
 	const char* GetDeviceName()const;
 
 	/**
-	* @brief »ñÈ¡Éè±¸Â·¾¶
-	* @return ·µ»ØÉè±¸Â·¾¶
+	* @brief è·å–è®¾å¤‡è·¯å¾„
+	* @return è¿”å›è®¾å¤‡è·¯å¾„
 	*/
 	const char* GetDevicePath() const;
 
 
 	/**
-	* @brief ¹Ø±ÕÉè±¸
+	* @brief å…³é—­è®¾å¤‡
 	*/
 	void CloseDevice();
 
 	/**
-	 * @brief »ñÈ¡×î´ó±¨¸æ³¤¶È
-	 * @return ·µ»Ø×î´ó±¨¸æ³¤¶È
+	 * @brief è·å–æœ€å¤§æŠ¥å‘Šé•¿åº¦
+	 * @return è¿”å›æœ€å¤§æŠ¥å‘Šé•¿åº¦
 	 */
 	int GetMaxReportLength();
 	/**
-	* @brief Ğ´Êı¾İµ½Éè±¸
-	* @param data Êı¾İ
-	* @param data_bytes Êı¾İ×Ö½ÚÊı
-	* @return ³É¹¦·µ»Øtrue£¬·ñÔò·µ»Øfalse
+	* @brief å†™æ•°æ®åˆ°è®¾å¤‡
+	* @param data æ•°æ®
+	* @param data_bytes æ•°æ®å­—èŠ‚æ•°
+	* @return æˆåŠŸè¿”å›trueï¼Œå¦åˆ™è¿”å›false
 	*/
 	bool Write(unsigned char* data, size_t data_bytes);
 
 	/// <summary>
-	/// ¶ÁÈ¡HIDÖĞ»º³åÇøÊı¾İµ½buff
+	/// è¯»å–HIDä¸­ç¼“å†²åŒºæ•°æ®åˆ°buff
 	/// </summary>
-	/// <param name="buff">¶ÁÈ¡Êı¾İµÄucharÊı×Ö</param>
-	/// <param name="data_size">×Ö½Ú³¤¶È</param>
-	/// <param name="waitTime">³¬Ê±Ê±¼ä</param>
+	/// <param name="buff">è¯»å–æ•°æ®çš„ucharæ•°å­—</param>
+	/// <param name="data_size">å­—èŠ‚é•¿åº¦</param>
+	/// <param name="waitTime">è¶…æ—¶æ—¶é—´</param>
 	/// <returns></returns>
 	bool Read(unsigned char* buff, size_t& data_size, int waitTime);
 
 	/// <summary>
-	/// Ïß³Ì¶ÁÈ¡Êı¾İ
+	/// çº¿ç¨‹è¯»å–æ•°æ®
 	/// </summary>
 	void LoopRead();
-	
+
 private:
-	/**
-	 * hidÉè±¸Â·¾¶
-	 */
-	char device_path[256];
+
 
 	/**
-	 * Éè±¸Ãû³Æ
+	 * è®¾å¤‡åç§°
 	 */
 	char name[128];
 
 	/**
-	 * hidÉè±¸¾ä±ú
+	 * hidè®¾å¤‡å¥æŸ„
 	 */
 	hid_device* handle;
 
 	/**
-	 * ½ÓÊÕÊı¾İ±¨ÎÄµÄ³¤¶È
+	 * æ¥æ”¶æ•°æ®æŠ¥æ–‡çš„é•¿åº¦
 	 */
 	int input_report_length;
 
-	//Éè±¸°Î²åÊÂ¼şÍ¨Öª»Øµ÷º¯ÊıµÄÓÃ»§´«ÈëµÄÊı¾İ
+	//è®¾å¤‡æ‹”æ’äº‹ä»¶é€šçŸ¥å›è°ƒå‡½æ•°çš„ç”¨æˆ·ä¼ å…¥çš„æ•°æ®
 
 	void* user_data;
 
 
 	/**
-	 * ÊÇ·ñÕıÔÚÃ¶¾ÙÉè±¸
-	 * MacµçÄÔÉÏÃ¶¾ÙÉè±¸Ê±£¬»á½øÈë»Øµ÷º¯Êıdevice_change_callback
+	 * æ˜¯å¦æ­£åœ¨æšä¸¾è®¾å¤‡
+	 * Macç”µè„‘ä¸Šæšä¸¾è®¾å¤‡æ—¶ï¼Œä¼šè¿›å…¥å›è°ƒå‡½æ•°device_change_callback
 	 */
 	bool enum_device;
 
 	/**
-	 * hidÉè±¸µÄvid
+	 * hidè®¾å¤‡çš„vid
 	 */
 	uint32_t device_vid;
 
 	/**
-	 * hidÉè±¸µÄpid
+	 * hidè®¾å¤‡çš„pid
 	 */
 	uint32_t device_pid;
 
 	bool blnRunning = false;
-	std::mutex mtx;  // »¥³âËø
+	std::mutex mtx;  // äº’æ–¥é”
 	std::thread readThread;
 };
 

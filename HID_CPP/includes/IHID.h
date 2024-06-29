@@ -116,6 +116,11 @@ public:
 	virtual void unregisterReadCallback() {
 		ReadCallback = nullptr;
 	}
+
+	/**
+* hid设备路径
+*/
+	char device_path[256];
 protected:
 	ICommunicateDevice() {}
 };

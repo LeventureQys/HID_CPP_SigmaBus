@@ -120,12 +120,30 @@ int CHID_Device::GetMaxReportLength()
 
 bool CHID_Device::Read(unsigned char* pBuff, size_t& res, int waitTime)
 {
-    std::lock_guard<std::mutex> lock(mtx);
+    //std::lock_guard<std::mutex> lock(mtx);
     if (!this->handle) {
         return  false;
     }
 
     res = hid_read_timeout(this->handle, pBuff, this->GetMaxReportLength(), 1024);
+    //这里计算一下长度
+    int index = 0;
+    unsigned char* pBuff_t = pBuff;
+    bool blnWithHeader = false;
+    if (pBuff_t[index] != 0xc4) {
+        index++;
+        //第一行不是帧头
+        blnWithHeader = true;
+    }
+    if (pBuff_t[index] != 0xc4) return false;
+    res = ((pBuff_t[index + 2] << 8) | pBuff_t[index + 1]);
+    //计算长度
+    if (blnWithHeader) {
+        res++;
+    }
+
+
+
 
     if (-1 == res)
         return false;
@@ -146,6 +164,9 @@ void CHID_Device::LoopRead()
             std::this_thread::sleep_for(std::chrono::milliseconds(100)); // 添加一些延迟
             continue;
         }
+        else {
+			std::cout << "RecvSuccess !" << std::endl;
+        }
 
         // 此处处理读取到的数据，这里主要是通过回调发出去
         if (this->ReadCallback != nullptr) {
@@ -158,16 +179,15 @@ void CHID_Device::LoopRead()
     }
 }
 
-
-
 bool CHID_Device::Write(unsigned char* data, size_t data_bytes)
 {
+    std::lock_guard<std::mutex> lock(mtx);
     if (!this->handle) {
         return  false;
     }
-
-    int res = hid_write(this->handle, data, data_bytes);
-    std::cout << __FUNCTION__<<" Get Data: " << res << data_bytes;
+    //还要加上report id
+    int res = hid_write(this->handle, data, data_bytes + 1);
+    std::cout << __FUNCTION__<<" Get Data: " << res << data_bytes<<std::endl;
     if (res != this->input_report_length)
         return false;
 

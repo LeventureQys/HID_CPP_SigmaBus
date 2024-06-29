@@ -13,12 +13,25 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_btn_random_write_clicked()
 {
-    test.SendTestMessage();
+    test.SendRandomWriteMessage();
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_btn_random_read_clicked()
+{
+    test.SendRandomReadMessage();
+}
+
+void MainWindow::on_btn_continue_write_clicked()
+{
+}
+
+void MainWindow::on_btn_continue_read_clicked()
+{
+}
+
+void MainWindow::on_btn_init_clicked()
 {
     test.Init(13615, 262);
 }
@@ -45,7 +58,7 @@ void MouseManager::AnalyseContinuousData(const DataContinuous& recv, int index)
 
 void MouseManager::SendTestMessage()
 {
-    //×éÖ¯Ò»¸öËæ»úµØÖ·Êı¾İ°ü·¢ËÍ
+    //ç»„ç»‡ä¸€ä¸ªéšæœºåœ°å€æ•°æ®åŒ…å‘é€
 	DataRandom send;
     QByteArray arr_add;
     arr_add.append(0x34);
@@ -56,7 +69,41 @@ void MouseManager::SendTestMessage()
     arr_val.append(0x78);
     arr_val.append(0x56);
 
-    CreateDataRandom(send, 0x4B, 11, 0x00, 0x03, (uint8_t*)arr_add.data(), (uint8_t*)arr_val.data(), CRCType::crc_32);
+    CreateDataRandom(send, 0x4B, 11, 0x00, 0x03, (uint8_t*)arr_add.data(), (uint8_t*)arr_val.data(), CRCType::crc_16);
 
-    this->SendRandom(&send, 10, 0);
+}
+
+void MouseManager::SendRandomWriteMessage()
+{
+    DataRandom send;
+    QByteArray arr_add;
+    arr_add.append(0x22);
+    arr_add.append(0x20);
+
+    QByteArray arr_val;
+
+    arr_val.append((char)0x00);
+    arr_val.append(0x01);
+
+    CreateDataRandom(send, 0x4B, 11, 0x00, 0x03, (uint8_t*)arr_add.data(), (uint8_t*)arr_val.data(), CRCType::crc_16);
+    this->SendRandom(&send, 3, 0);
+}
+
+void MouseManager::SendRandomReadMessage()
+{
+    ReadRandomDataPack send;
+
+    QByteArray arr_addr;
+    arr_addr.append(0x20);
+    arr_addr.append(0x22);
+
+	CreateReadRandomDataPack(send, 0x4B,9,0x00,0x04, (uint8_t*)arr_addr.data(), CRCType::crc_16);
+}
+
+void MouseManager::SendContinuousWriteMessage()
+{
+}
+
+void MouseManager::SendContinuousReadMessage()
+{
 }

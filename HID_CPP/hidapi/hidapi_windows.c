@@ -175,6 +175,112 @@ extern "C" {
 		free(dev->read_buf);
 		free(dev);
 	}
+//#include "Dbt.h"
+//	//Window Message,so classic
+//	HWND hWnd = NULL;
+//	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+//
+//	hid_device_removal_callback callback = NULL;
+//
+//	DEFINE_GUID(GUID_DEVCLASS_USB, 0x36fc9e60, 0xc465, 0x11cf, 0x80, 0x71, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00);
+//	int WINAPI InitHidRemovalCallback() {
+//		if (hWnd) return -1;
+//		WNDCLASS wc;
+//		ZeroMemory(&wc, sizeof(WNDCLASS)); // 使用ZeroMemory或memset将结构体清零
+//		wc.lpfnWndProc = WndProc;
+//		wc.hInstance = GetModuleHandle(NULL);
+//		wc.lpszClassName = L"USBMonitorWindowClass";
+//		RegisterClass(&wc);
+//		DEV_BROADCAST_DEVICEINTERFACE NotificationFilter;
+//		ZeroMemory(&NotificationFilter, sizeof(NotificationFilter));
+//		NotificationFilter.dbcc_size = sizeof(NotificationFilter);
+//		NotificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
+//		// GUID_DEVCLASS_USB 是 USB 设备的类 GUID
+//		memcpy(&NotificationFilter.dbcc_classguid, &GUID_DEVCLASS_USB, sizeof(GUID));
+//		hWnd = CreateWindow(L"USBMonitorWindowClass", L"HiddenUSBMonitor", 0, 0, 0, 0, 0, NULL, NULL, wc.hInstance, NULL);
+//		if (!RegisterDeviceNotification(hWnd, &NotificationFilter, DEVICE_NOTIFY_WINDOW_HANDLE)) {
+//				return -1;
+//		}
+//		
+//		if (!hWnd) {
+//			return -1;
+//		}
+//
+//		ShowWindow(hWnd, SW_HIDE); // 隐藏窗口
+//
+//		return hWnd != NULL;
+//	}
+//	void UninitHidRemovalCallback() {
+//		if (hWnd) {
+//			DestroyWindow(hWnd);
+//		}
+//	}
+//
+//	void HID_API_EXPORT_CALL register_hid_device_removal_callback(hid_device_removal_callback callback_) {
+//		if (hWnd == NULL) {
+//			InitHidRemovalCallback();
+//		}
+//		callback_ = callback;
+//	}
+//
+//	void HID_API_EXPORT_CALL unregister_hid_device_removal_callback(void) {
+//		callback = NULL;
+//	}
+//#include <devguid.h>
+//
+//	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+//
+//		if (message == WM_DEVICECHANGE) {
+//			if (wParam == DBT_DEVICEARRIVAL || wParam == DBT_DEVICEREMOVECOMPLETE) {
+//				PDEV_BROADCAST_HDR pHdr = (PDEV_BROADCAST_HDR)lParam;
+//				if (pHdr && pHdr->dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE) {
+//					PDEV_BROADCAST_DEVICEINTERFACE pDevInf = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
+//					if (memcmp(&pDevInf->dbcc_classguid, &GUID_DEVCLASS_USB, sizeof(GUID)) == 0) {
+//						DEVINST devInst;
+//						ULONG len = 0;
+//
+//						if (CM_Locate_DevNode(&devInst, (DEVINSTID*)&pDevInf->dbcc_name, CM_LOCATE_DEVNODE_NORMAL) == CR_SUCCESS) {
+//							CONFIGRET cr = CM_Get_Device_ID(devInst, NULL, 0, &len, 0);
+//							if (cr == CR_BUFFER_SMALL) {
+//								WCHAR* devicePath = (WCHAR*)malloc(len * sizeof(WCHAR)); // C风格动态内存分配
+//								if (CM_Get_Device_ID(devInst, devicePath, len, 0, 0) == CR_SUCCESS) {
+//									// 计算多字节字符串所需的缓冲区大小
+//									int size_needed = WideCharToMultiByte(CP_ACP, 0, devicePath, -1, NULL, 0, NULL, NULL);
+//									char* pathMB = (char*)malloc(size_needed * sizeof(char)); // 动态分配多字节字符串缓冲区
+//
+//									// 将宽字符字符串转换为多字节字符串
+//									WideCharToMultiByte(CP_ACP, 0, devicePath, -1, pathMB, size_needed, NULL, NULL);
+//
+//									USHORT vid = (USHORT)((pDevInf->dbcc_classguid.Data1 >> 16) & 0xffff);
+//									USHORT pid = (USHORT)(pDevInf->dbcc_classguid.Data1 & 0xffff);
+//
+//									if (wParam == DBT_DEVICEARRIVAL) {
+//										printf("USB Device Arrived - VID: %#x PID: %#x Path: %s\n", vid, pid, pathMB);
+//										if (callback != NULL) {
+//											callback(vid, pid, pathMB, true);
+//										}
+//									}
+//									else if (wParam == DBT_DEVICEREMOVECOMPLETE) {
+//										printf("USB Device Removed - VID: %#x PID: %#x Path: %s\n", vid, pid, pathMB);
+//										callback(vid, pid, pathMB, false);
+//									}
+//
+//									free(pathMB);
+//								}
+//								free(devicePath);
+//							}
+//						}
+//					}
+//				}
+//			}
+//			
+//		}
+//		else if (message == WM_DESTROY) {
+//			PostQuitMessage(0);
+//		}
+//
+//		return DefWindowProc(hWnd, message, wParam, lParam);
+//	}
 
 	static void register_error(hid_device* device, const char* op)
 	{
@@ -261,6 +367,8 @@ extern "C" {
 			}
 			initialized = TRUE;
 		}
+		//initwindows callback
+		//InitHidRemovalCallback();
 #endif
 		return 0;
 	}
@@ -272,8 +380,11 @@ extern "C" {
 			FreeLibrary(lib_handle);
 		lib_handle = NULL;
 		initialized = FALSE;
+		//initwindows callback
+		//UninitHidRemovalCallback();
 #endif
 		return 0;
+
 	}
 
 
@@ -508,9 +619,13 @@ extern "C" {
 		/* Close the device information handle. */
 		SetupDiDestroyDeviceInfoList(device_info_set);
 
+
 		return root;
 
 	}
+
+
+
 
 	void  HID_API_EXPORT HID_API_CALL hid_free_enumeration(struct hid_device_info* devs)
 	{

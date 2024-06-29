@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>220</width>
+    <height>265</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="btn_init">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -24,10 +24,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>初始化hid</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="btn_random_write">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -37,7 +37,46 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>随机写入</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_random_read">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>随机读取</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_continue_write">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>120</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>连续写入</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_continue_read">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>150</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>连续读取</string>
     </property>
    </widget>
   </widget>
@@ -46,7 +85,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>220</width>
      <height>23</height>
     </rect>
    </property>

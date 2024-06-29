@@ -336,6 +336,15 @@ extern "C" {
 	*/
 	HID_API_EXPORT const wchar_t* HID_API_CALL hid_error(hid_device* device);
 
+//	//provide a callback function that can get message from device that remove from system.
+//	//now Windows only
+//	//幽默c不支持bool...
+//#include "stdbool.h"
+//	typedef HID_API_EXPORT_CALL void(*hid_device_removal_callback)(unsigned short vid, unsigned short pid, unsigned char* path,bool blnPlugin);
+//
+//	void HID_API_EXPORT_CALL register_hid_device_removal_callback(hid_device_removal_callback callback);
+//
+//	void HID_API_EXPORT_CALL unregister_hid_device_removal_callback(void);
 #ifdef __cplusplus
 }
 #endif

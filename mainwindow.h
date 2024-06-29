@@ -6,7 +6,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-//³¢ÊÔ¼Ì³ĞÒ»¸öDeviceManager£¬¿´¿´Ğ§¹û
+//å°è¯•ç»§æ‰¿ä¸€ä¸ªDeviceManagerï¼Œçœ‹çœ‹æ•ˆæœ
 class MouseManager : public CHID_DeviceManager {
 public:
     MouseManager();
@@ -16,6 +16,11 @@ public:
     void AnalyseContinuousData(const DataContinuous& recv,int index);
 
     void SendTestMessage();
+
+    void SendRandomWriteMessage();
+    void SendRandomReadMessage();
+	void SendContinuousWriteMessage();
+	void SendContinuousReadMessage();
 };
 
 class MainWindow : public QMainWindow
@@ -30,7 +35,10 @@ private:
     MouseManager test;
     Ui::MainWindow *ui;
 private slots:
-    void on_pushButton_clicked();
-    void on_pushButton_2_clicked();
+    void on_btn_init_clicked();
+    void on_btn_random_write_clicked();
+    void on_btn_random_read_clicked();
+    void on_btn_continue_write_clicked();
+    void on_btn_continue_read_clicked();
 };
 #endif // MAINWINDOW_H

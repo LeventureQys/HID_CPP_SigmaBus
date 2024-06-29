@@ -4,19 +4,19 @@
 #include "IHID.h"
 
 /*
- * CCMÊı¾İ°ü¼ÓÃÜ½âÃÜËã·¨
+ * CCMæ•°æ®åŒ…åŠ å¯†è§£å¯†ç®—æ³•
  */
 class CcmEasyEncrypt : public ICommEncrypt
 {
 public:
 
     /**
-     @brief ¹¹Ôìº¯Êı
-     @param[in] key:¼ÓÃÜËã·¨ÓÃµ½µÄkey
-     @param[in] mKey:¼ÓÃÜËã·¨ÓÃµ½µÄkey
-     @param[in] iaKey:¼ÓÃÜËã·¨ÓÃµ½µÄkey
-     @param[in] varKey:¼ÓÃÜËã·¨ÓÃµ½µÄkey
-     @param[in] nDataLen:Êı¾İ°üÖĞĞèÒª¼ÓÃÜµÄÊı¾İÓòµÄ×Ö½ÚÊı
+     @brief æ„é€ å‡½æ•°
+     @param[in] key:åŠ å¯†ç®—æ³•ç”¨åˆ°çš„key
+     @param[in] mKey:åŠ å¯†ç®—æ³•ç”¨åˆ°çš„key
+     @param[in] iaKey:åŠ å¯†ç®—æ³•ç”¨åˆ°çš„key
+     @param[in] varKey:åŠ å¯†ç®—æ³•ç”¨åˆ°çš„key
+     @param[in] nDataLen:æ•°æ®åŒ…ä¸­éœ€è¦åŠ å¯†çš„æ•°æ®åŸŸçš„å­—èŠ‚æ•°
      @return
      @sa
      @retval
@@ -26,8 +26,8 @@ public:
     CcmEasyEncrypt(uint16_t key, uint8_t mKey, uint16_t iaKey, uint8_t varKey, int nDataLen);
 
     /**
-     @brief ¼ÓÃÜÊı¾İ
-     @param[in out] data:Òª¼ÓÃÜµÄÊı¾İ°ü
+     @brief åŠ å¯†æ•°æ®
+     @param[in out] data:è¦åŠ å¯†çš„æ•°æ®åŒ…
      @return  void
      @sa
      @retval
@@ -37,8 +37,8 @@ public:
     virtual void Encrypt(PACKDATA& data);
 
     /**
-     @brief ½âÃÜÊı¾İ
-     @param[in out] data:Òª½âÃÜµÄÊı¾İ°ü
+     @brief è§£å¯†æ•°æ®
+     @param[in out] data:è¦è§£å¯†çš„æ•°æ®åŒ…
      @return  void
      @sa
      @retval

@@ -7,19 +7,19 @@ enum class HID_API CRCType {
     crc_16,
     crc_32
 };
-// CRC8Ğ£Ñé
-// ¶¼ÊÇ¾²Ì¬º¯Êı£¬²»ĞèÒªÊµÀı»¯£¬¿ÉÒÔÖ±½Óµ÷ÓÃ
+// CRC8æ ¡éªŒ
+// éƒ½æ˜¯é™æ€å‡½æ•°ï¼Œä¸éœ€è¦å®ä¾‹åŒ–ï¼Œå¯ä»¥ç›´æ¥è°ƒç”¨
 class HID_API CCRC
 {
 public:
 
     /**
-     @brief »ñµÃCRCµÄĞ£ÑéºÍ
-     @param[in] buf:Òª¼ÆËãCRCĞ£ÑéºÍµÄÊı¾İ
-     @param[in] size:bufÖĞÊı¾İµÄ×Ö½ÚÊı
+     @brief è·å¾—CRCçš„æ ¡éªŒå’Œ
+     @param[in] buf:è¦è®¡ç®—CRCæ ¡éªŒå’Œçš„æ•°æ®
+     @param[in] size:bufä¸­æ•°æ®çš„å­—èŠ‚æ•°
      @return  uint8_t
      @sa
-     @retval ·µ»ØÊı¾İµÄCRCĞ£ÑéºÍ
+     @retval è¿”å›æ•°æ®çš„CRCæ ¡éªŒå’Œ
      @note
      @author hzf
     */

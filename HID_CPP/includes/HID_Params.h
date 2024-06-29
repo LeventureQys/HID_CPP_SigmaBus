@@ -1,113 +1,164 @@
 #pragma once
 
-//³£¼û²ÎÊı±í£¬ÓÃÓÚ´æ·ÅMaonoÄÚ²¿³£¼û²ÎÊıÁĞ±í
+//å¸¸è§å‚æ•°è¡¨ï¼Œç”¨äºå­˜æ”¾Maonoå†…éƒ¨å¸¸è§å‚æ•°åˆ—è¡¨
 #include <iostream>
 #include "CRC.h"
 namespace HIDParam {
 	//0xC4
-	const uint8_t Header = 0xC4;			//Ö¡Í·
-	const uint8_t CC_ID = 0x00;				//CC(CP_CMD)±£Áô£¬²»ÄÜÊ¹ÓÃ0
-	const uint8_t CC_ERROR_CODE = 0x02;		//´íÎóÏìÓ¦Ö¡µÄCMD
-	const uint8_t CC_PARAM_RAND_WR = 0x03;	//Ëæ»úĞ´²ÎÊı£¨2×Ö½ÚµØÖ·£©
-	const uint8_t CC_PARAM_RAND_RD = 0x04;	//Ëæ»ú¶Á²ÎÊı£¨2×Ö½ÚµØÖ·£©
-	const uint8_t CC_PARAM_SEQU_WR = 0x05;  // Á¬ĞøĞ´²ÎÊı£¨2×Ö½ÚµØÖ·£©
-	const uint8_t CC_PARAM_SEQU_RD = 0x06;  // Á¬Ğø¶Á²ÎÊı£¨2×Ö½ÚµØÖ·£©
+	const uint8_t Header = 0xC4;			//å¸§å¤´
+	const uint8_t CC_ID = 0x00;				//CC(CP_CMD)ä¿ç•™ï¼Œä¸èƒ½ä½¿ç”¨0
+	const uint8_t CC_ERROR_CODE = 0x02;		//é”™è¯¯å“åº”å¸§çš„CMD
+	const uint8_t CC_PARAM_RAND_WR = 0x03;	//éšæœºå†™å‚æ•°ï¼ˆ2å­—èŠ‚åœ°å€ï¼‰
+	const uint8_t CC_PARAM_RAND_RD = 0x04;	//éšæœºè¯»å‚æ•°ï¼ˆ2å­—èŠ‚åœ°å€ï¼‰
+	const uint8_t CC_PARAM_SEQU_WR = 0x05;  // è¿ç»­å†™å‚æ•°ï¼ˆ2å­—èŠ‚åœ°å€ï¼‰
+	const uint8_t CC_PARAM_SEQU_RD = 0x06;  // è¿ç»­è¯»å‚æ•°ï¼ˆ2å­—èŠ‚åœ°å€ï¼‰
 
-	const uint8_t CC_PARAM_RAND_WR_EXT = 0x07;	//À©Õ¹Ëæ»úĞ´²ÎÊı£¨4×Ö½ÚµØÖ·£©
-	const uint8_t CC_PARAM_RAND_RD_EXT = 0x08;	//À©Õ¹Ëæ»ú¶Á²ÎÊı£¨4×Ö½ÚµØÖ·£©
-	const uint8_t CC_PARAM_SEQU_WR_EXT = 0x09;  // À©Õ¹Á¬ĞøĞ´²ÎÊı£¨4×Ö½ÚµØÖ·£©
-	const uint8_t CC_PARAM_SEQU_RD_EXT = 0x0A;  // À©Õ¹Á¬Ğø¶Á²ÎÊı£¨4×Ö½ÚµØÖ·£©
+	const uint8_t CC_PARAM_RAND_WR_EXT = 0x07;	//æ‰©å±•éšæœºå†™å‚æ•°ï¼ˆ4å­—èŠ‚åœ°å€ï¼‰
+	const uint8_t CC_PARAM_RAND_RD_EXT = 0x08;	//æ‰©å±•éšæœºè¯»å‚æ•°ï¼ˆ4å­—èŠ‚åœ°å€ï¼‰
+	const uint8_t CC_PARAM_SEQU_WR_EXT = 0x09;  // æ‰©å±•è¿ç»­å†™å‚æ•°ï¼ˆ4å­—èŠ‚åœ°å€ï¼‰
+	const uint8_t CC_PARAM_SEQU_RD_EXT = 0x0A;  // æ‰©å±•è¿ç»­è¯»å‚æ•°ï¼ˆ4å­—èŠ‚åœ°å€ï¼‰
 
-	const uint8_t CC_DFU = 0x0B;				//DFUÄ£Ê½ ¹Ì¼şÉı¼¶ÃüÁî
-	const uint8_t CC_CTRL = 0x0C;			//Ïß¿ØÍ¨Ñ¶ÃüÁî
+	const uint8_t CC_DFU = 0x0B;				//DFUæ¨¡å¼ å›ºä»¶å‡çº§å‘½ä»¤
+	const uint8_t CC_CTRL = 0x0C;			//çº¿æ§é€šè®¯å‘½ä»¤
 }
 
-// Ëæ»ú¶ÁĞ´Êı¾İ½á¹¹
-//³õÊ¼»¯ÇëÍ³Ò»Ê¹ÓÃCreateDataRandom½øĞĞ
+// éšæœºå†™æ•°æ®ç»“æ„
+//åˆå§‹åŒ–è¯·ç»Ÿä¸€ä½¿ç”¨CreateDataRandomè¿›è¡Œ
 struct DataRandom {
-	uint8_t report;          // ±¨ÎÄID
-	uint8_t frame_header;    // Ö¡Í·
-	uint8_t frame_len_L;     // Ö¡³¤¶ÈµÍ×Ö½Ú
-	uint8_t frame_len_H;     // Ö¡³¤¶È¸ß×Ö½Ú
-	uint8_t cp_addr;         // Éè±¸µØÖ·
-	uint8_t command;         // ÃüÁî±àÂë
-	uint8_t* param_addr;   // Êı¾İµÄµØÖ·,Çë°´ÕÕparam1_l,param1_h,param2_l,param2_hµÄ·½Ê½ÅÅÁĞ
-	uint8_t* param_value;  // Êı¾İµÄÖµ£¬Çë°´ÕÕparam1_l,param1_h,param2_l,param2_hµÄ·½Ê½ÅÅÁĞ
+	uint8_t report;          // æŠ¥æ–‡ID
+	uint8_t frame_header;    // å¸§å¤´
+	uint8_t frame_len_L;     // å¸§é•¿åº¦ä½å­—èŠ‚
+	uint8_t frame_len_H;     // å¸§é•¿åº¦é«˜å­—èŠ‚
+	uint8_t cp_addr;         // è®¾å¤‡åœ°å€
+	uint8_t command;         // å‘½ä»¤ç¼–ç 
+	uint8_t* param_addr;   // æ•°æ®çš„åœ°å€,è¯·æŒ‰ç…§param1_l,param1_h,param2_l,param2_hçš„æ–¹å¼æ’åˆ—
+	uint8_t* param_value;  // æ•°æ®çš„å€¼ï¼Œè¯·æŒ‰ç…§param1_l,param1_h,param2_l,param2_hçš„æ–¹å¼æ’åˆ—
 	uint8_t CRC_L;
 	uint8_t CRC_H;
-	// ½«½á¹¹Ìå×ª»»³É×Ö½ÚÊı×é£¬´æ´¢ÔÚÍâ²¿Ìá¹©µÄ»º³åÇøÖĞ
+	// å°†ç»“æ„ä½“è½¬æ¢æˆå­—èŠ‚æ•°ç»„ï¼Œå­˜å‚¨åœ¨å¤–éƒ¨æä¾›çš„ç¼“å†²åŒºä¸­
 	inline bool toData(unsigned char* buffer, size_t& length) const;
 };
 
-// ¶ÁÈ¡Ëæ»ú²ÎÊıÇëÇó½á¹¹Ìå
+// è¯»å–éšæœºå‚æ•°è¯·æ±‚ç»“æ„ä½“
 struct ReadRandomDataPack {
-	uint8_t report;          // ±¨ÎÄID
-	uint8_t frame_header;    // Ö¡Í·
-	uint8_t frame_len_L;     // Ö¡³¤¶ÈµÍ×Ö½Ú
-	uint8_t frame_len_H;     // Ö¡³¤¶È¸ß×Ö½Ú
-	uint8_t cp_addr;         // Éè±¸µØÖ·
-	uint8_t command;         // ÃüÁî±àÂë
-	uint8_t* param_addr;     // Êı¾İµÄµØÖ·
-	uint8_t CRC_L;           // CRCµÍ×Ö½Ú
-	uint8_t CRC_H;           // CRC¸ß×Ö½Ú
-	// ½«½á¹¹Ìå×ª»»³É×Ö½ÚÊı×é£¬´æ´¢ÔÚÍâ²¿Ìá¹©µÄ»º³åÇøÖĞ
+	uint8_t report;          // æŠ¥æ–‡ID
+	uint8_t frame_header;    // å¸§å¤´
+	uint8_t frame_len_L;     // å¸§é•¿åº¦ä½å­—èŠ‚
+	uint8_t frame_len_H;     // å¸§é•¿åº¦é«˜å­—èŠ‚
+	uint8_t cp_addr;         // è®¾å¤‡åœ°å€
+	uint8_t command;         // å‘½ä»¤ç¼–ç 
+	uint8_t* param_addr;     // æ•°æ®çš„åœ°å€
+	uint8_t CRC_L;           // CRCä½å­—èŠ‚
+	uint8_t CRC_H;           // CRCé«˜å­—èŠ‚
+	// å°†ç»“æ„ä½“è½¬æ¢æˆå­—èŠ‚æ•°ç»„ï¼Œå­˜å‚¨åœ¨å¤–éƒ¨æä¾›çš„ç¼“å†²åŒºä¸­
 	inline bool toData(unsigned char* buffer, size_t& length) const;
 };
 
 
-// Á¬ĞøµØÖ·µÄ¶ÁĞ´ÇëÇó½á¹¹Ìå
+// è¿ç»­åœ°å€çš„å†™è¯·æ±‚ç»“æ„ä½“
 struct DataContinuous {
 
-	uint8_t report;          // ±¨ÎÄID
-	uint8_t frame_header;    // Ö¡Í·
-	uint8_t frame_len_L;     // Ö¡³¤¶ÈµÍ×Ö½Ú
-	uint8_t frame_len_H;     // Ö¡³¤¶È¸ß×Ö½Ú
-	uint8_t cp_addr;         // Éè±¸µØÖ·
-	uint8_t command;         // ÃüÁî±àÂë
-	// Êı¾İ²¿·Ö----------------
-	uint8_t param_addr[2];   // Êı¾İµÄµØÖ·
-	uint8_t param_num[2];    // Êı¾İµÄÊıÁ¿»ò³¤¶È
-	uint8_t* param_value;   // Êı¾İµÄÖµ£¨¿É±ä³¤¶È£©,´Ë²¿·ÖÔÚÄÚ´æÉÏÓ¦ÊôÓÚCRCÇ°·½
-	uint8_t crc_L;           // CRCĞ£ÑéµÍ×Ö½Ú
-	uint8_t crc_H;           // CRCĞ£Ñé¸ß×Ö½Ú
-	// ½«½á¹¹Ìå×ª»»³É×Ö½ÚÊı×é£¬´æ´¢ÔÚÍâ²¿Ìá¹©µÄ»º³åÇøÖĞ
+	uint8_t report;          // æŠ¥æ–‡ID
+	uint8_t frame_header;    // å¸§å¤´
+	uint8_t frame_len_L;     // å¸§é•¿åº¦ä½å­—èŠ‚
+	uint8_t frame_len_H;     // å¸§é•¿åº¦é«˜å­—èŠ‚
+	uint8_t cp_addr;         // è®¾å¤‡åœ°å€
+	uint8_t command;         // å‘½ä»¤ç¼–ç 
+	// æ•°æ®éƒ¨åˆ†----------------
+	uint8_t param_addr[2];   // æ•°æ®çš„åœ°å€
+	uint8_t param_num[2];    // æ•°æ®çš„æ•°é‡æˆ–é•¿åº¦
+	uint8_t* param_value;   // æ•°æ®çš„å€¼ï¼ˆå¯å˜é•¿åº¦ï¼‰,æ­¤éƒ¨åˆ†åœ¨å†…å­˜ä¸Šåº”å±äºCRCå‰æ–¹
+	uint8_t crc_L;           // CRCæ ¡éªŒä½å­—èŠ‚
+	uint8_t crc_H;           // CRCæ ¡éªŒé«˜å­—èŠ‚
+	// å°†ç»“æ„ä½“è½¬æ¢æˆå­—èŠ‚æ•°ç»„ï¼Œå­˜å‚¨åœ¨å¤–éƒ¨æä¾›çš„ç¼“å†²åŒºä¸­
 	inline bool toData(unsigned char* buffer, size_t& length) const;
 };
 
-// Á¬ĞøµØÖ·µÄ¶ÁÈ¡ÇëÇó½á¹¹Ìå
+// è¿ç»­åœ°å€çš„è¯»å–è¯·æ±‚ç»“æ„ä½“
 struct ReadDataContinuous {
 
-	uint8_t report;          // ±¨ÎÄID
-	uint8_t frame_header;    // Ö¡Í·
-	uint8_t frame_len_L;     // Ö¡³¤¶ÈµÍ×Ö½Ú
-	uint8_t frame_len_H;     // Ö¡³¤¶È¸ß×Ö½Ú
-	uint8_t cp_addr;         // Éè±¸µØÖ·
-	uint8_t command;         // ÃüÁî±àÂë
-	// Êı¾İ²¿·Ö----------------
-	uint8_t param_addr[2];   // Êı¾İµÄµØÖ·
-	uint8_t param_num[2];    // Êı¾İµÄÊıÁ¿»ò³¤¶È
-	uint8_t crc_L;           // CRCĞ£ÑéµÍ×Ö½Ú
-	uint8_t crc_H;           // CRCĞ£Ñé¸ß×Ö½Ú
-	// ½«½á¹¹Ìå×ª»»³É×Ö½ÚÊı×é£¬´æ´¢ÔÚÍâ²¿Ìá¹©µÄ»º³åÇøÖĞ
+	uint8_t report;          // æŠ¥æ–‡ID
+	uint8_t frame_header;    // å¸§å¤´
+	uint8_t frame_len_L;     // å¸§é•¿åº¦ä½å­—èŠ‚
+	uint8_t frame_len_H;     // å¸§é•¿åº¦é«˜å­—èŠ‚
+	uint8_t cp_addr;         // è®¾å¤‡åœ°å€
+	uint8_t command;         // å‘½ä»¤ç¼–ç 
+	// æ•°æ®éƒ¨åˆ†----------------
+	uint8_t param_addr[2];   // æ•°æ®çš„åœ°å€
+	uint8_t param_num[2];    // æ•°æ®çš„æ•°é‡æˆ–é•¿åº¦
+	uint8_t crc_L;           // CRCæ ¡éªŒä½å­—èŠ‚
+	uint8_t crc_H;           // CRCæ ¡éªŒé«˜å­—èŠ‚
+	// å°†ç»“æ„ä½“è½¬æ¢æˆå­—èŠ‚æ•°ç»„ï¼Œå­˜å‚¨åœ¨å¤–éƒ¨æä¾›çš„ç¼“å†²åŒºä¸­
 	inline bool toData(unsigned char* buffer, size_t& length) const;
 };
+
+//åº”ç­”å¸§
+struct ReplyFrame {
+	uint8_t report;		//æŠ¥å¤´ID
+	uint8_t frame_header;	//å¸§å¤´
+	uint8_t frame_len_L;     // å¸§é•¿åº¦ä½å­—èŠ‚
+	uint8_t frame_len_H;     // å¸§é•¿åº¦é«˜å­—èŠ‚
+	uint8_t cp_addr;         // è®¾å¤‡åœ°å€
+	uint8_t command;         // å‘½ä»¤ç¼–ç 
+	uint8_t ERR_CODE_L;      // é”™è¯¯ä»£ç ä½å­—èŠ‚
+	uint8_t ERR_CODE_H;      // é”™è¯¯ä»£ç é«˜å­—èŠ‚
+	uint8_t CRC_L;           // CRCæ ¡éªŒä½å­—èŠ‚
+	uint8_t CRC_H;           // CRCæ ¡éªŒé«˜å­—èŠ‚
+	inline bool FromData(unsigned char* buffer, size_t length) {
+		if (length < 9) {
+			std::cerr << "Invalid data length!" << std::endl;
+			return false;
+		}
+
+		if (length == 9) {
+			// æ— æŠ¥å¤´çš„æƒ…å†µ
+			frame_header = buffer[0];
+			frame_len_L = buffer[1];
+			frame_len_H = buffer[2];
+			cp_addr = buffer[3];
+			command = buffer[4];
+			ERR_CODE_L = buffer[5];
+			ERR_CODE_H = buffer[6];
+			CRC_L = buffer[7];
+			CRC_H = buffer[8];
+		}
+		else if (length == 10) {
+			// æœ‰æŠ¥å¤´çš„æƒ…å†µ
+			report = buffer[0];
+			frame_header = buffer[1];
+			frame_len_L = buffer[2];
+			frame_len_H = buffer[3];
+			cp_addr = buffer[4];
+			command = buffer[5];
+			ERR_CODE_L = buffer[6];
+			ERR_CODE_H = buffer[7];
+			CRC_L = buffer[8];
+			CRC_H = buffer[9];
+		}
+		else {
+			std::cerr << "Unexpected data length!" << std::endl;
+			return false;
+		}
+		return true;
+	}
+};
 enum class ReplyType {
-	Random = 0x03,			//Ëæ»úµØÖ·¶ÁĞ´
-	Continuous = 0x04,		//Á¬ĞøµØÖ·¶ÁĞ´
-	Confirm = 0x02			//È·ÈÏÊÕµ½ÏûÏ¢Ó¦´ğ
+	Continuous = 0x06,			//è¿ç»­åœ°å€è¯»
+	Random = 0x04,		//éšæœºåœ°å€è¯»
+	Confirm = 0x02			//æ¥åˆ°å†™å…¥ä¿¡æ¯åçš„æ ‡å‡†åº”ç­”
 };
 bool DataRandom::toData(unsigned char* buffer, size_t& length) const {
 	if (!buffer) {
 		std::cerr << "Buffer is null!" << std::endl;
 		return false;
 	}
-	
-	// ¼ÆËãÊı¾İ×Ü³¤¶È
-	size_t param_size = ((frame_len_H << 8) | frame_len_L) - 7; // ³ıÈ¥Í·²¿ºÍCRCµÄ³¤¶È
-	param_size /= 2;
-	length = param_size + 8 + 1; // Í·²¿6×Ö½Ú + param_addr + param_value + CRC
 
-	// ½«½á¹¹ÌåµÄ×Ö¶ÎĞ´Èë×Ö½ÚÊı×é
+	// è®¡ç®—æ•°æ®æ€»é•¿åº¦
+	size_t param_size = ((frame_len_H << 8) | frame_len_L) - 7; // é™¤å»å¤´éƒ¨å’ŒCRCçš„é•¿åº¦
+	param_size /= 2;
+	length = param_size + 8 + 1; // å¤´éƒ¨6å­—èŠ‚ + param_addr + param_value + CRC
+
+	// å°†ç»“æ„ä½“çš„å­—æ®µå†™å…¥å­—èŠ‚æ•°ç»„
 	size_t offset = 0;
 	buffer[offset++] = report;
 	buffer[offset++] = frame_header;
@@ -116,17 +167,17 @@ bool DataRandom::toData(unsigned char* buffer, size_t& length) const {
 	buffer[offset++] = cp_addr;
 	buffer[offset++] = command;
 
-	//¼ÆËãÒ»ÏÂ×ÔÓÉÇøµÄ½á¹¹´óĞ¡
+	//è®¡ç®—ä¸€ä¸‹è‡ªç”±åŒºçš„ç»“æ„å¤§å°
 	int free_param_size = (length - 7) / 4;
-	
+
 	for (int i = 0; i < free_param_size; ++i) {
-		buffer[offset + 4*i] = param_addr[2*i];
-		buffer[offset + (4*i) + 1] = param_addr[(2 * i) + 1];
+		buffer[offset + 4 * i] = param_addr[2 * i];
+		buffer[offset + (4 * i) + 1] = param_addr[(2 * i) + 1];
 		buffer[offset + (4 * i) + 2] = param_value[2 * i];
 		buffer[offset + (4 * i) + 3] = param_value[(2 * i) + 1];
 	}
 	offset += 4 * free_param_size;
-	// ¸´ÖÆCRC
+	// å¤åˆ¶CRC
 	buffer[offset++] = CRC_L;
 	buffer[offset++] = CRC_H;
 
@@ -139,11 +190,11 @@ bool ReadRandomDataPack::toData(unsigned char* buffer, size_t& length) const {
 		return false;
 	}
 
-	// ¼ÆËãÊı¾İ×Ü³¤¶È
-	size_t param_size = ((frame_len_H << 8) | frame_len_L) - 8; // ³ıÈ¥Í·²¿ºÍCRCµÄ³¤¶È
-	length = 8 + param_size + 2; // Í·²¿6×Ö½Ú + param_addr + CRC
+	// è®¡ç®—æ•°æ®æ€»é•¿åº¦
+	size_t param_size = ((frame_len_H << 8) | frame_len_L) - 8; // é™¤å»å¤´éƒ¨å’ŒCRCçš„é•¿åº¦
+	length = 8 + param_size + 2; // å¤´éƒ¨6å­—èŠ‚ + param_addr + CRC
 
-	// ½«½á¹¹ÌåµÄ×Ö¶ÎĞ´Èë×Ö½ÚÊı×é
+	// å°†ç»“æ„ä½“çš„å­—æ®µå†™å…¥å­—èŠ‚æ•°ç»„
 	size_t offset = 0;
 	//buffer[offset++] = report;
 	buffer[offset++] = frame_header;
@@ -152,11 +203,11 @@ bool ReadRandomDataPack::toData(unsigned char* buffer, size_t& length) const {
 	buffer[offset++] = cp_addr;
 	buffer[offset++] = command;
 
-	// ¸´ÖÆparam_addr
+	// å¤åˆ¶param_addr
 	std::memcpy(&buffer[offset], param_addr, param_size);
 	offset += param_size;
 
-	// ¸´ÖÆCRC
+	// å¤åˆ¶CRC
 	buffer[offset++] = CRC_L;
 	buffer[offset++] = CRC_H;
 
@@ -169,11 +220,11 @@ bool DataContinuous::toData(unsigned char* buffer, size_t& length) const {
 		return false;
 	}
 
-	// ¼ÆËãÊı¾İ×Ü³¤¶È
-	size_t param_value_len = ((frame_len_H << 8) | frame_len_L) - 10; // ³ıÈ¥Í·²¿ºÍ¹Ì¶¨³¤¶È×Ö¶Î
-	length = 10 + param_value_len + 2; // Í·²¿10×Ö½Ú + param_value + CRC
+	// è®¡ç®—æ•°æ®æ€»é•¿åº¦
+	size_t param_value_len = ((frame_len_H << 8) | frame_len_L) - 10; // é™¤å»å¤´éƒ¨å’Œå›ºå®šé•¿åº¦å­—æ®µ
+	length = 10 + param_value_len + 2; // å¤´éƒ¨10å­—èŠ‚ + param_value + CRC
 
-	// ½«½á¹¹ÌåµÄ×Ö¶ÎĞ´Èë×Ö½ÚÊı×é
+	// å°†ç»“æ„ä½“çš„å­—æ®µå†™å…¥å­—èŠ‚æ•°ç»„
 	size_t offset = 0;
 	//buffer[offset++] = report;
 	buffer[offset++] = frame_header;
@@ -186,11 +237,11 @@ bool DataContinuous::toData(unsigned char* buffer, size_t& length) const {
 	buffer[offset++] = param_num[0];
 	buffer[offset++] = param_num[1];
 
-	// ¸´ÖÆparam_value
+	// å¤åˆ¶param_value
 	std::memcpy(&buffer[offset], param_value, param_value_len);
 	offset += param_value_len;
 
-	// ¸´ÖÆCRC
+	// å¤åˆ¶CRC
 	buffer[offset++] = crc_L;
 	buffer[offset++] = crc_H;
 
@@ -203,10 +254,10 @@ bool ReadDataContinuous::toData(unsigned char* buffer, size_t& length) const {
 		return false;
 	}
 
-	// ¼ÆËãÊı¾İ×Ü³¤¶È
-	length = 10 + 2; // Í·²¿10×Ö½Ú + CRC
+	// è®¡ç®—æ•°æ®æ€»é•¿åº¦
+	length = 10 + 2; // å¤´éƒ¨10å­—èŠ‚ + CRC
 
-	// ½«½á¹¹ÌåµÄ×Ö¶ÎĞ´Èë×Ö½ÚÊı×é
+	// å°†ç»“æ„ä½“çš„å­—æ®µå†™å…¥å­—èŠ‚æ•°ç»„
 	size_t offset = 0;
 	//buffer[offset++] = report;
 	buffer[offset++] = frame_header;
@@ -219,41 +270,41 @@ bool ReadDataContinuous::toData(unsigned char* buffer, size_t& length) const {
 	buffer[offset++] = param_num[0];
 	buffer[offset++] = param_num[1];
 
-	// ¸´ÖÆCRC
+	// å¤åˆ¶CRC
 	buffer[offset++] = crc_L;
 	buffer[offset++] = crc_H;
 
 	return true;
 }
-// ³õÊ¼»¯º¯ÊıµÄÊµÏÖ
+// åˆå§‹åŒ–å‡½æ•°çš„å®ç°
 /**
- * @brief ³õÊ¼»¯ DataRandom ½á¹¹Ìå
+ * @brief åˆå§‹åŒ– DataRandom ç»“æ„ä½“
  *
- * @param data DataRandom ½á¹¹ÌåÊµÀı
- * @param report ±¨ÎÄID
- * @param frame_len Ö¡³¤¶È
- * @param cp_addr Éè±¸µØÖ·
- * @param command ÃüÁî±àÂë£¬ÕâÀïÄ¬ÈÏ±¾Ó¦¸ÃÊÇ0x03£¬µ«Êµ¼ÊÉÏ²»Ò»¶¨
- * @param param_addr Êı¾İµÄµØÖ·
- * @param param_value Êı¾İµÄÖµ
+ * @param data DataRandom ç»“æ„ä½“å®ä¾‹
+ * @param report æŠ¥æ–‡ID
+ * @param frame_len å¸§é•¿åº¦
+ * @param cp_addr è®¾å¤‡åœ°å€
+ * @param command å‘½ä»¤ç¼–ç ï¼Œè¿™é‡Œé»˜è®¤æœ¬åº”è¯¥æ˜¯0x03ï¼Œä½†å®é™…ä¸Šä¸ä¸€å®š
+ * @param param_addr æ•°æ®çš„åœ°å€
+ * @param param_value æ•°æ®çš„å€¼
  */
 inline void CreateDataRandom(DataRandom& data, uint8_t report, uint16_t frame_len, uint8_t cp_addr, uint8_t command, uint8_t* param_addr, uint8_t* param_value, CRCType type) {
 
 	int length = (int)frame_len;
 
-	// Çå¿Õ»º³åÇø
+	// æ¸…ç©ºç¼“å†²åŒº
 	std::memset(&data, 0, sizeof(data));
-	// ÉèÖÃĞ­ÒéÊı¾İ°ü½á¹¹
+	// è®¾ç½®åè®®æ•°æ®åŒ…ç»“æ„
 	data.report = report;
 	data.frame_header = HIDParam::Header;
-	data.frame_len_L = static_cast<uint8_t>(frame_len & 0xFF); // µÍ×Ö½Ú
-	data.frame_len_H = static_cast<uint8_t>((frame_len >> 8) & 0xFF); // ¸ß×Ö½Ú
+	data.frame_len_L = static_cast<uint8_t>(frame_len & 0xFF); // ä½å­—èŠ‚
+	data.frame_len_H = static_cast<uint8_t>((frame_len >> 8) & 0xFF); // é«˜å­—èŠ‚
 	data.cp_addr = cp_addr;
 	data.command = command;
 	data.param_addr = param_addr;
 	data.param_value = param_value;
 
-	// ½«Òª¼ÆËãCRCµÄÊı¾İÆ´½Ó³ÉÒ»¸ö»º³åÇø£¬²»°üÀ¨±¨Í·
+	// å°†è¦è®¡ç®—CRCçš„æ•°æ®æ‹¼æ¥æˆä¸€ä¸ªç¼“å†²åŒºï¼Œä¸åŒ…æ‹¬æŠ¥å¤´
 	uint8_t buffer[128];
 	std::memset(buffer, 0, sizeof(buffer));
 	buffer[0] = data.frame_header;
@@ -265,7 +316,7 @@ inline void CreateDataRandom(DataRandom& data, uint8_t report, uint16_t frame_le
 	int param_size = (length - 7) / 4;
 
 	for (int i = 0; i < param_size; ++i) {
-		buffer[5 + i * 4] = param_addr[2*i];
+		buffer[5 + i * 4] = param_addr[2 * i];
 		buffer[6 + i * 4] = param_addr[2 * i + 1];
 		buffer[7 + i * 4] = param_value[2 * i];
 		buffer[8 + i * 4] = param_value[2 * i + 1];
@@ -273,22 +324,22 @@ inline void CreateDataRandom(DataRandom& data, uint8_t report, uint16_t frame_le
 
 	uint32_t crc = CCRC::Crc(buffer, length - 1, type);
 
-	// ½«CRC·ÖÎªµÍ×Ö½ÚºÍ¸ß×Ö½Ú
+	// å°†CRCåˆ†ä¸ºä½å­—èŠ‚å’Œé«˜å­—èŠ‚
 	data.CRC_L = static_cast<uint8_t>(crc & 0xFF);
 	data.CRC_H = static_cast<uint8_t>((crc >> 8) & 0xFF);
 }
 
-// ½âÎö DataRandom ½á¹¹ÌåµÄº¯Êı
+// è§£æ DataRandom ç»“æ„ä½“çš„å‡½æ•°
 inline bool ParseDataRandom(const unsigned char* data, size_t length, DataRandom& dataRandom) {
-	if (length < 10) { // »ù±¾½á¹¹³¤¶ÈÖÁÉÙÎª10×Ö½Ú
+	if (length < 10) { // åŸºæœ¬ç»“æ„é•¿åº¦è‡³å°‘ä¸º10å­—èŠ‚
 		std::cerr << "Data length too short to parse DataRandom structure." << std::endl;
 		return false;
 	}
-	// Çå¿Õ»º³åÇø
+	// æ¸…ç©ºç¼“å†²åŒº
 	std::memset(&dataRandom, 0, sizeof(dataRandom));
 	size_t offset = 0;
-
-	// ÌáÈ¡Ğ­ÒéÊı¾İ°ü½á¹¹µÄ×Ö¶Î
+	//report idä¸å‚ä¸crcè®¡ç®—
+	// æå–åè®®æ•°æ®åŒ…ç»“æ„çš„å­—æ®µ
 	dataRandom.report = data[offset++];
 	dataRandom.frame_header = data[offset++];
 	dataRandom.frame_len_L = data[offset++];
@@ -296,15 +347,17 @@ inline bool ParseDataRandom(const unsigned char* data, size_t length, DataRandom
 	dataRandom.cp_addr = data[offset++];
 	dataRandom.command = data[offset++];
 
-	// ¼ÆËãÖ¡Êı¾İ³¤¶È
-	uint16_t frame_len = (static_cast<uint16_t>(dataRandom.frame_len_H) << 8) | static_cast<uint16_t>(dataRandom.frame_len_L);
+
+
+	// è®¡ç®—å¸§æ•°æ®é•¿åº¦
+	uint16_t frame_len = (static_cast<uint16_t>(dataRandom.frame_len_H) << 8) | static_cast<uint16_t>(dataRandom.frame_len_L) + 1;
 	if (length < frame_len) {
 		std::cerr << "Data length mismatch with frame length." << std::endl;
 		return false;
 	}
 
-	// ¶¯Ì¬·ÖÅäÄÚ´æ²¢¸´ÖÆÊı¾İµ½ param_addr ºÍ param_value
-	size_t param_size = frame_len - 8; // ³ıÈ¥Í·²¿ºÍCRCµÄ³¤¶È
+	// åŠ¨æ€åˆ†é…å†…å­˜å¹¶å¤åˆ¶æ•°æ®åˆ° param_addr å’Œ param_value
+	size_t param_size = (frame_len - 8) / 2; // é™¤å»å¤´éƒ¨å’ŒCRCçš„é•¿åº¦
 	dataRandom.param_addr = new uint8_t[param_size];
 	dataRandom.param_value = new uint8_t[param_size];
 
@@ -313,45 +366,67 @@ inline bool ParseDataRandom(const unsigned char* data, size_t length, DataRandom
 	std::memcpy(dataRandom.param_value, &data[offset], param_size);
 	offset += param_size;
 
-	// ÌáÈ¡ CRC
+
+	//åˆ›å»ºä¸€ä¸ªå†…å­˜æ•°ç»„ï¼Œç”¨æ¥è®¡ç®—CRCæ•°æ®
+
+
+	// æå– CRC
 	dataRandom.CRC_L = data[offset++];
 	dataRandom.CRC_H = data[offset++];
+	uint16_t ret = (static_cast<uint16_t>(dataRandom.CRC_H) << 8) | dataRandom.CRC_L;
+	//è·å–CRCå¹¶è¿›è¡Œæ ¡éªŒæ¯”å¯¹ï¼Œä½¿ç”¨crc16è¿›è¡Œè®¡ç®—
+	int int_crc_size = frame_len - 3;
+	uint8_t* crc_buffer = new uint8_t[int_crc_size];
 
-	return true;
+	const uint8_t* new_start = data + 1;
+	std::memcpy(crc_buffer, new_start, int_crc_size);
+
+
+	//è®¡ç®—crc
+
+	uint16_t crc_ret = CCRC::Crc16(crc_buffer, int_crc_size);
+
+	if (ret == crc_ret) {
+		return true;
+	}
+	else {
+		//å¦‚æœè¿™é‡Œå¤±è´¥äº†ï¼Œéœ€è¦æ‰“å°ç»“æœ
+		std::cout << __FUNCTION__ << "crc failed";
+		return false;
+	}
+
+
+	return false;
 }
 
-
-
-// ÊÍ·Åmyrandom_write½á¹¹ÌåÊµÀı
+// é‡Šæ”¾myrandom_writeç»“æ„ä½“å®ä¾‹
 inline void FreeDataRandom(DataRandom* packet) {
 	free(packet);
 }
 
-
-
-// ´´½¨ ReadRandomDataPack ½á¹¹ÌåµÄº¯Êı
+// åˆ›å»º ReadRandomDataPack ç»“æ„ä½“çš„å‡½æ•°
 inline void CreateReadRandomDataPack(ReadRandomDataPack& data, uint8_t report, uint16_t frame_len, uint8_t cp_addr, uint8_t command, uint8_t* param_addr, CRCType type) {
-	// ÕâÀï¼òµ¥ÉèÖÃÎª0£¬¿ÉÒÔ¸ù¾İÊµ¼ÊĞèÒª¼ÆËãCRCÖµ
-   //Èç¹ûĞèÒª¼ÆËãCRC£¬ÔòĞèÒª°ÑËùÓĞÊı¾İÈ¡³öÀ´¼ÆËã
+	// è¿™é‡Œç®€å•è®¾ç½®ä¸º0ï¼Œå¯ä»¥æ ¹æ®å®é™…éœ€è¦è®¡ç®—CRCå€¼
+   //å¦‚æœéœ€è¦è®¡ç®—CRCï¼Œåˆ™éœ€è¦æŠŠæ‰€æœ‰æ•°æ®å–å‡ºæ¥è®¡ç®—
 	int length = (int)frame_len;
 
-	//·ÇÖ¸ÕëÇøÓò³¤¶È
+	//éæŒ‡é’ˆåŒºåŸŸé•¿åº¦
 	length -= 8;
 
-	//³¤¶ÈÓĞÎóÔòÖ±½ÓÍË³ö
+	//é•¿åº¦æœ‰è¯¯åˆ™ç›´æ¥é€€å‡º
 	if (length % 4 != 0 || length / 4 == 0) return;
 
-	// Çå¿Õ»º³åÇø
+	// æ¸…ç©ºç¼“å†²åŒº
 	std::memset(&data, 0, sizeof(data));
-	// ÉèÖÃĞ­ÒéÊı¾İ°ü½á¹¹
+	// è®¾ç½®åè®®æ•°æ®åŒ…ç»“æ„
 	data.frame_header = HIDParam::Header;
-	data.frame_len_L = static_cast<uint8_t>(frame_len & 0xFF); // µÍ×Ö½Ú
-	data.frame_len_H = static_cast<uint8_t>((frame_len >> 8) & 0xFF); // ¸ß×Ö½Ú
+	data.frame_len_L = static_cast<uint8_t>(frame_len & 0xFF); // ä½å­—èŠ‚
+	data.frame_len_H = static_cast<uint8_t>((frame_len >> 8) & 0xFF); // é«˜å­—èŠ‚
 	data.cp_addr = cp_addr;
 	data.command = command;
 	data.param_addr = param_addr;
 
-	// ½«Òª¼ÆËãCRCµÄÊı¾İÆ´½Ó³ÉÒ»¸ö»º³åÇø£¬²»°üÀ¨±¨Í·
+	// å°†è¦è®¡ç®—CRCçš„æ•°æ®æ‹¼æ¥æˆä¸€ä¸ªç¼“å†²åŒºï¼Œä¸åŒ…æ‹¬æŠ¥å¤´
 	uint8_t buffer[128];
 	std::memset(buffer, 0, sizeof(buffer));
 	buffer[0] = data.frame_header;
@@ -359,41 +434,35 @@ inline void CreateReadRandomDataPack(ReadRandomDataPack& data, uint8_t report, u
 	buffer[2] = data.frame_len_H;
 	buffer[3] = data.cp_addr;
 	buffer[4] = data.command;
-	std::memcpy(&buffer[5], param_addr, length - 8); // ¼õÈ¥Í·²¿×Ö¶ÎºÍCRC×Ö¶ÎµÄ³¤¶È
+	std::memcpy(&buffer[5], param_addr, length - 8); // å‡å»å¤´éƒ¨å­—æ®µå’ŒCRCå­—æ®µçš„é•¿åº¦
 
 	uint32_t crc = CCRC::Crc(buffer, length - 1, type);
 
-	// ½«CRC·ÖÎªµÍ×Ö½ÚºÍ¸ß×Ö½Ú
+	// å°†CRCåˆ†ä¸ºä½å­—èŠ‚å’Œé«˜å­—èŠ‚
 	data.CRC_L = static_cast<uint8_t>(crc & 0xFF);
 	data.CRC_H = static_cast<uint8_t>((crc >> 8) & 0xFF);
 }
 
-
-
-
-
-
-
 inline void CreateDataContinuous(DataContinuous& data, uint8_t report, uint16_t frame_len, uint8_t cp_addr, uint8_t command, uint8_t* param_addr, uint8_t* param_num, uint8_t* param_value, uint16_t param_value_len) {
-	// Çå¿Õ»º³åÇø
+	// æ¸…ç©ºç¼“å†²åŒº
 	std::memset(&data, 0, sizeof(data));
-
-	// ÉèÖÃĞ­ÒéÊı¾İ°ü½á¹¹
+	int int_frame_len = frame_len;
+	// è®¾ç½®åè®®æ•°æ®åŒ…ç»“æ„
 	data.report = report;
 	data.frame_header = HIDParam::Header;
-	data.frame_len_L = static_cast<uint8_t>(frame_len & 0xFF); // µÍ×Ö½Ú
-	data.frame_len_H = static_cast<uint8_t>((frame_len >> 8) & 0xFF); // ¸ß×Ö½Ú
+	data.frame_len_L = static_cast<uint8_t>(frame_len & 0xFF); // ä½å­—èŠ‚
+	data.frame_len_H = static_cast<uint8_t>((frame_len >> 8) & 0xFF); // é«˜å­—èŠ‚
 	data.cp_addr = cp_addr;
 	data.command = command;
 	std::memcpy(data.param_addr, param_addr, 2);
 	std::memcpy(data.param_num, param_num, 2);
 
-	// ¶¯Ì¬·ÖÅä²¢¸´ÖÆ param_value
+	// åŠ¨æ€åˆ†é…å¹¶å¤åˆ¶ param_value
 	data.param_value = new uint8_t[param_value_len];
 	std::memcpy(data.param_value, param_value, param_value_len);
 
-	// ½«Òª¼ÆËãCRCµÄÊı¾İÆ´½Ó³ÉÒ»¸ö»º³åÇø
-	uint8_t* buffer = new uint8_t[6 + 2 + 2 + param_value_len]; // ¶¯Ì¬·ÖÅä»º³åÇø
+	// å°†è¦è®¡ç®—CRCçš„æ•°æ®æ‹¼æ¥æˆä¸€ä¸ªç¼“å†²åŒº
+	uint8_t* buffer = new uint8_t[6 + 2 + 2 + param_value_len]; // åŠ¨æ€åˆ†é…ç¼“å†²åŒº
 	size_t offset = 0;
 	buffer[offset++] = data.frame_header;
 	buffer[offset++] = data.frame_len_L;
@@ -407,26 +476,23 @@ inline void CreateDataContinuous(DataContinuous& data, uint8_t report, uint16_t 
 	std::memcpy(&buffer[offset], data.param_value, param_value_len);
 	offset += param_value_len;
 
-	// ¼ÆËãCRC
-	uint32_t crc = CCRC::Crc32(buffer, offset);
+	// è®¡ç®—CRC
+	uint16_t crc = CCRC::Crc16(buffer, offset);
 
-	// ½«CRC·ÖÎªµÍ×Ö½ÚºÍ¸ß×Ö½Ú
+	// å°†CRCåˆ†ä¸ºä½å­—èŠ‚å’Œé«˜å­—èŠ‚
 	data.crc_L = static_cast<uint8_t>(crc & 0xFF);
 	data.crc_H = static_cast<uint8_t>((crc >> 8) & 0xFF);
-
-	// ÊÍ·Å¶¯Ì¬·ÖÅäµÄ»º³åÇø
-	
 }
 
 inline bool ParseDataContinuous(const unsigned char* data, size_t length, DataContinuous& dataContinuous) {
-	if (length < 10) { // »ù±¾½á¹¹³¤¶ÈÖÁÉÙÎª10×Ö½Ú£¬²»°üº¬¿É±ä³¤¶ÈµÄÊı¾İ
+	if (length < 10) { // åŸºæœ¬ç»“æ„é•¿åº¦è‡³å°‘ä¸º10å­—èŠ‚ï¼Œä¸åŒ…å«å¯å˜é•¿åº¦çš„æ•°æ®
 		std::cerr << "Data length too short to parse DataContinuous structure." << std::endl;
 		return false;
 	}
 
 	size_t offset = 0;
 
-	// ÌáÈ¡Ğ­ÒéÊı¾İ°ü½á¹¹µÄ×Ö¶Î
+	// æå–åè®®æ•°æ®åŒ…ç»“æ„çš„å­—æ®µ
 	dataContinuous.report = data[offset++];
 	dataContinuous.frame_header = data[offset++];
 	dataContinuous.frame_len_L = data[offset++];
@@ -434,59 +500,70 @@ inline bool ParseDataContinuous(const unsigned char* data, size_t length, DataCo
 	dataContinuous.cp_addr = data[offset++];
 	dataContinuous.command = data[offset++];
 
-	// ÌáÈ¡µØÖ·ºÍÊıÁ¿×Ö¶Î
+	// æå–åœ°å€å’Œæ•°é‡å­—æ®µ
 	std::memcpy(dataContinuous.param_addr, &data[offset], 2);
 	offset += 2;
 	std::memcpy(dataContinuous.param_num, &data[offset], 2);
 	offset += 2;
 
-	// ¼ÆËãÖ¡Êı¾İ³¤¶È
-	uint16_t frame_len = (static_cast<uint16_t>(dataContinuous.frame_len_H) << 8) | static_cast<uint16_t>(dataContinuous.frame_len_L);
+	// è®¡ç®—å¸§æ•°æ®é•¿åº¦
+	uint16_t frame_len = (static_cast<uint16_t>(dataContinuous.frame_len_H) << 8) | static_cast<uint16_t>(dataContinuous.frame_len_L) + 1;
 	if (length < frame_len) {
 		std::cerr << "Data length mismatch with frame length." << std::endl;
 		return false;
 	}
 
-	// ¼ÆËã¿É±ä³¤¶ÈµÄÊı¾İ²¿·Ö
-	size_t param_value_len = frame_len - 10; // ³ıÈ¥Í·²¿ºÍ¹Ì¶¨³¤¶È×Ö¶Î
+	// è®¡ç®—å¯å˜é•¿åº¦çš„æ•°æ®éƒ¨åˆ†
+	size_t param_value_len = frame_len - 8; // é™¤å»å¤´éƒ¨å’Œå›ºå®šé•¿åº¦å­—æ®µ
 
-	// ¶¯Ì¬·ÖÅäÄÚ´æ²¢¸´ÖÆÊı¾İµ½ param_value
+	// åŠ¨æ€åˆ†é…å†…å­˜å¹¶å¤åˆ¶æ•°æ®åˆ° param_value
 	dataContinuous.param_value = new uint8_t[param_value_len];
 	std::memcpy(dataContinuous.param_value, &data[offset], param_value_len);
 	offset += param_value_len;
 
-	// ÌáÈ¡ CRC
+	// æå– CRC
 	dataContinuous.crc_L = data[offset++];
 	dataContinuous.crc_H = data[offset++];
 
-	return true;
+	uint16_t ret_crc = (dataContinuous.crc_H << 8) | dataContinuous.crc_L;
+
+
+	//è¿™é‡Œéœ€è¦è¿›è¡ŒCRCæ ¡éªŒï¼Œç”¨ä»¥è¿”å›true or false
+	const uint8_t* newStart = data + 1;
+	uint8_t* crc_buffer = new uint8_t(frame_len - 3);
+	std::memcpy(crc_buffer, newStart, frame_len - 3);
+	uint16_t ret = CCRC::Crc16(crc_buffer, frame_len - 3);
+	if (ret == ret_crc) {
+		return true;
+	}
+	else {
+		return false;
+	}
+	return false;
 }
 
-// ÊÍ·Å DataContinuous ½á¹¹ÌåµÄ¶¯Ì¬ÄÚ´æ
+// é‡Šæ”¾ DataContinuous ç»“æ„ä½“çš„åŠ¨æ€å†…å­˜
 inline void FreeDataContinuous(DataContinuous& dataContinuous) {
 	delete[] dataContinuous.param_value;
 	dataContinuous.param_value = nullptr;
 }
 
 
-
-
-
 inline void CreateReadDataContinuous(ReadDataContinuous& data, uint8_t report, uint16_t frame_len, uint8_t cp_addr, uint8_t command, uint8_t* param_addr, uint8_t* param_num) {
-	// Çå¿Õ»º³åÇø
+	// æ¸…ç©ºç¼“å†²åŒº
 	std::memset(&data, 0, sizeof(data));
 
-	// ÉèÖÃĞ­ÒéÊı¾İ°ü½á¹¹
+	// è®¾ç½®åè®®æ•°æ®åŒ…ç»“æ„
 	data.report = report;
-	data.frame_header = 0x02; // Ê¾ÀıÖ¡Í·£¬¿ÉÒÔ¸ù¾İĞèÒªĞŞ¸Ä
-	data.frame_len_L = static_cast<uint8_t>(frame_len & 0xFF); // µÍ×Ö½Ú
-	data.frame_len_H = static_cast<uint8_t>((frame_len >> 8) & 0xFF); // ¸ß×Ö½Ú
+	data.frame_header = 0x02; // ç¤ºä¾‹å¸§å¤´ï¼Œå¯ä»¥æ ¹æ®éœ€è¦ä¿®æ”¹
+	data.frame_len_L = static_cast<uint8_t>(frame_len & 0xFF); // ä½å­—èŠ‚
+	data.frame_len_H = static_cast<uint8_t>((frame_len >> 8) & 0xFF); // é«˜å­—èŠ‚
 	data.cp_addr = cp_addr;
 	data.command = command;
 	std::memcpy(data.param_addr, param_addr, 2);
 	std::memcpy(data.param_num, param_num, 2);
 
-	// ¼ÆËãCRC
+	// è®¡ç®—CRC
 	uint8_t buffer[10];
 	buffer[0] = data.report;
 	buffer[1] = data.frame_header;
@@ -499,9 +576,9 @@ inline void CreateReadDataContinuous(ReadDataContinuous& data, uint8_t report, u
 	buffer[8] = data.param_num[0];
 	buffer[9] = data.param_num[1];
 
-	uint32_t crc = CCRC::Crc32(buffer, 10);
+	uint16_t crc = CCRC::Crc16(buffer, 10);
 
-	// ½«CRC·ÖÎªµÍ×Ö½ÚºÍ¸ß×Ö½Ú
+	// å°†CRCåˆ†ä¸ºä½å­—èŠ‚å’Œé«˜å­—èŠ‚
 	data.crc_L = static_cast<uint8_t>(crc & 0xFF);
 	data.crc_H = static_cast<uint8_t>((crc >> 8) & 0xFF);
 }
